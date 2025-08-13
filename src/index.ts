@@ -1,8 +1,8 @@
 import { LinkHarvester } from './crawler.js';
-import { HarvestOptions, HarvestResult, LinkRecord } from './types.js';
+import { HarvestOptions, HarvestResult, LinkRecord, AnchorTextInfo } from './types.js';
 
 // Re-export types for library users
-export type { HarvestOptions, HarvestResult, LinkRecord };
+export type { HarvestOptions, HarvestResult, LinkRecord, AnchorTextInfo };
 
 /**
  * Main harvest function - library API entry point
@@ -33,6 +33,7 @@ export async function harvest(options: HarvestOptions): Promise<HarvestResult> {
     settleMs: 250,
     userAgent: "Link-Harvest/1.0 (+https://github.com/mrozanski/link-harvest)",
     logLevel: 'warn',
+    dedupe: 'none',
     ...options
   };
 

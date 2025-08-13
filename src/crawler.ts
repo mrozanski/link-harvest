@@ -1,7 +1,8 @@
 import pino from 'pino';
-import { HarvestOptions, HarvestResult, LinkRecord, QueueItem } from './types.js';
+import { HarvestOptions, HarvestResult, QueueItem } from './types.js';
 import { normalizeUrl, isSameHost, extractDomainFromUrl } from './normalize.js';
 import { BrowserManager } from './browser.js';
+import { RawLinkData, deduplicateLinks } from './deduplication.js';
 
 export class LinkHarvester {
   private logger: pino.Logger;
@@ -9,7 +10,7 @@ export class LinkHarvester {
   private visited = new Set<string>();
   private enqueued = new Set<string>();
   private queue: QueueItem[] = [];
-  private links: LinkRecord[] = [];
+  private rawLinks: RawLinkData[] = [];
   private domain: string = '';
   private startTime: Date = new Date();
 
@@ -104,7 +105,7 @@ export class LinkHarvester {
         this.logger.error(`Failed to process page ${item.url}: ${error}`);
         
         // Add record for failed page
-        this.links.push({
+        this.rawLinks.push({
           url: item.url,
           discoveredOn: this.getDiscoveredOn(item.url),
           depth: item.depth,
@@ -116,7 +117,7 @@ export class LinkHarvester {
       }
     }
 
-    this.logger.info(`Crawl completed. Processed ${pagesProcessed} pages, found ${this.links.length} links.`);
+    this.logger.info(`Crawl completed. Processed ${pagesProcessed} pages, found ${this.rawLinks.length} raw links.`);
   }
 
   private async processPage(item: QueueItem, maxDepth: number, timeoutMs: number, settleMs: number): Promise<void> {
@@ -141,10 +142,10 @@ export class LinkHarvester {
         try {
           const normalizedUrl = normalizeUrl(link.href, finalUrl);
           
-          // Check if it's same-host and not already processed
-          if (isSameHost(normalizedUrl, this.domain) && !this.visited.has(normalizedUrl)) {
-            // Add to links collection
-            this.links.push({
+          // Check if it's same-host
+          if (isSameHost(normalizedUrl, this.domain)) {
+            // Add to raw links collection
+            this.rawLinks.push({
               url: normalizedUrl,
               discoveredOn: item.url,
               depth: item.depth,
@@ -154,8 +155,8 @@ export class LinkHarvester {
               contentType: contentType
             });
 
-            // Collect for enqueueing if within depth limit
-            if (item.depth < maxDepth) {
+            // Collect for enqueueing if not already visited/enqueued and within depth limit
+            if (!this.visited.has(normalizedUrl) && item.depth < maxDepth) {
               discoveredUrls.push(normalizedUrl);
             }
           }
@@ -188,23 +189,24 @@ export class LinkHarvester {
       return url;
     }
     
-    // Find the link record that has this URL to get its discoveredOn
-    const linkRecord = this.links.find(link => link.url === url);
+    // Find the first raw link record that has this URL to get its discoveredOn
+    const linkRecord = this.rawLinks.find(link => link.url === url);
     return linkRecord?.discoveredOn || url;
   }
 
   private buildResult(): HarvestResult {
-    // Sort links lexicographically by URL for stable output
-    const sortedLinks = [...this.links].sort((a, b) => a.url.localeCompare(b.url));
+    // Apply deduplication based on options
+    const dedupeMode = this.options.dedupe || 'none';
+    const processedLinks = deduplicateLinks(this.rawLinks, dedupeMode);
 
     return {
       start: this.options.start,
       domain: this.domain,
       options: this.options,
-      count: sortedLinks.length,
+      count: processedLinks.length,
       crawlStarted: this.startTime.toISOString(),
       crawlCompleted: new Date().toISOString(),
-      links: sortedLinks
+      links: processedLinks
     };
   }
 
