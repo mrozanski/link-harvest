@@ -1,0 +1,23 @@
+{
+  "name": "@dotsur/link-harvest",
+  "version": "1.0.0",
+  "description": "Deterministic link harvesting for QA and website migration testing",
+  "main": "dist/index.js",
+  "bin": {
+    "link-harvest": "./dist/cli.js"
+  },
+  "keywords": ["qa", "testing", "crawler", "links", "harvest", "n8n", "dotsur"],
+  "author": "Mariano Rozanski <mariano@dotsur.co>",
+  "license": "GNU",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrozanski/link-harvest"
+  },
+  "bugs": {
+    "url": "https://github.com/mrozanski/link-harvest/issues"
+  },
+  "homepage": "https://github.com/mrozanski/link-harvest#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
