@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget B - Test Site</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/products/">Products</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h1>Widget B</h1>
+        <p>This is our standard Widget B product.</p>
+        
+        <section>
+            <h2>Specifications</h2>
+            <ul>
+                <li>Spec 1</li>
+                <li>Spec 2</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Related Products</h2>
+            <ul>
+                <li><a href="/products/widget-a.html">Widget A</a></li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Navigation</h2>
+            <ul>
+                <li><a href="/products/">All Products</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About</a></li>
+            </ul>
+        </section>
+        
+        <!-- Test query parameters and fragments (should be normalized) -->
+        <section>
+            <h2>URL Normalization Tests</h2>
+            <ul>
+                <li><a href="/?test=param">Home with Query</a></li>
+                <li><a href="/#section">Home with Fragment</a></li>
+                <li><a href="/?param=1#fragment">Query + Fragment</a></li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

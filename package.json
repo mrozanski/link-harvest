@@ -1,0 +1,55 @@
+{
+  "name": "@dotsur/link-harvest",
+  "version": "1.0.0",
+  "description": "Deterministic link harvesting for QA and website migration testing",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "link-harvest": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:fixtures": "serve test/fixtures -p 3000 -s",
+    "clean": "rm -rf dist/",
+    "link-local": "npm run build && npm link",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": ["qa", "testing", "crawler", "links", "harvest", "n8n", "dotsur"],
+  "author": "Mariano Rozanski <mariano@dotsur.co>",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrozanski/link-harvest"
+  },
+  "bugs": {
+    "url": "https://github.com/mrozanski/link-harvest/issues"
+  },
+  "homepage": "https://github.com/mrozanski/link-harvest#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "playwright": "^1.46.0",
+    "yargs": "^17.7.2",
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@types/yargs": "^17.0.33",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
+    "eslint": "^9.9.0",
+    "prettier": "^3.3.3",
+    "serve": "^14.2.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

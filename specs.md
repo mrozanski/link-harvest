@@ -368,16 +368,56 @@ Minimal Effective Fixture Structure
 
 ### Phase 1.1 - Core Crawler CLI & Library
 
-- [ ] Basic TypeScript project setup
-- [ ] `harvest()` function with core BFS logic
-- [ ] Playwright browser management
-- [ ] URL normalization (simplified)
-- [ ] CLI wrapper with yargs
-- [ ] JSON output format
-- [ ] CSV output format
-- [ ] Basic error handling
-- [ ] Unit tests for normalization
-- [ ] Integration test with fixture site
+- [ ] **Project Setup**: TypeScript, build system, dependencies
+- [ ] **Core Library**: `harvest()` function with BFS logic
+- [ ] **CLI Interface**: `link-harvest` command with all Phase 1 options
+- [ ] **Fixture Site**: Simple test pages with known link structure  
+- [ ] **Tests**: Unit tests + integration tests with fixtures
+- [ ] **Local Commands**: `npm link` + CLI works locally
+- [ ] **Documentation**: README with local development instructions
+- [ ] **Output Validation**: JSON/CSV formats match specs exactly
+
+**Deliverable:** "Run `npm link` and the CLI works locally with deterministic output"
+
+### **Development Workflow (Phase 1.1)**
+
+**Local Development Setup (Claude Code should implement):**
+
+```json
+// package.json scripts section
+{
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "npm run test:fixtures & vitest",
+    "test:fixtures": "serve test/fixtures -p 3000 -s &",
+    "clean": "rm -rf dist/",
+    "link-local": "npm run build && npm link"
+  }
+}
+```
+
+**Local Testing Commands:**
+```bash
+# Development cycle
+npm run build
+npm link                    # Makes 'link-harvest' available globally
+link-harvest --help         # Test CLI locally
+
+# Test with fixtures
+npm run test:fixtures       # Starts fixture server on :3000
+link-harvest --start http://localhost:3000 --domain localhost --max-depth 2
+```
+
+**Pre-publish Checklist:**
+- [ ] `npm run build` succeeds
+- [ ] `npm run test` passes
+- [ ] `npm link && link-harvest --help` works
+- [ ] CLI produces valid JSON output
+- [ ] Fixture tests deterministic (run twice, identical results)
+
+**Do NOT publish to npm yet** - this will be done manually after local testing.
+
 
 ### Phase 1.2 - n8n Integration & Execute Command Node
 
