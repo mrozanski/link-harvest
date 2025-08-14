@@ -136,7 +136,7 @@ The CSV format adapts based on deduplication mode:
 - `--domain <hostname>` - Primary host for same-host scope
 - `--max-depth <n>` - Maximum crawl depth (default: 2)
 - `--max-pages <n>` - Hard cap on pages to process (default: 1000)
-- `--timeout-ms <ms>` - Page navigation timeout (default: 45000)
+- `--timeout-ms <ms>` - Page navigation timeout (default: 5000)
 - `--settle-ms <ms>` - Extra wait after networkidle (default: 250)
 - `--output <json|csv>` - Output format (default: json)
 - `--out-file <path>` - Write to file instead of stdout

@@ -29,7 +29,7 @@ export async function harvest(options: HarvestOptions): Promise<HarvestResult> {
   const harvestOptions: HarvestOptions = {
     maxDepth: 2,
     maxPages: 1000,
-    timeoutMs: 45000,
+    timeoutMs: 5000,
     settleMs: 250,
     userAgent: "Link-Harvest/1.0 (+https://github.com/mrozanski/link-harvest)",
     logLevel: 'warn',

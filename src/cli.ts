@@ -133,7 +133,7 @@ async function main() {
     .option('timeout-ms', {
       type: 'number',
       description: 'Page navigation timeout in milliseconds',
-      default: 45000
+      default: 5000
     })
     .option('settle-ms', {
       type: 'number',

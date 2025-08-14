@@ -65,7 +65,7 @@ export function mergeLinks(rawLinks: RawLinkData[]): LinkRecord {
 export function deduplicateLinks(rawLinks: RawLinkData[], mode: DedupeMode): LinkRecord[] {
   if (mode === 'none') {
     // Convert each raw link to enhanced format with single-item arrays
-    return rawLinks.map(rawLink => ({
+    const convertedLinks = rawLinks.map(rawLink => ({
       url: rawLink.url,
       discoveredOn: [rawLink.discoveredOn],
       discoveryCount: 1,
@@ -79,6 +79,9 @@ export function deduplicateLinks(rawLinks: RawLinkData[], mode: DedupeMode): Lin
       status: rawLink.status,
       contentType: rawLink.contentType
     }));
+    
+    // Sort by URL for stable output even in 'none' mode
+    return convertedLinks.sort((a, b) => a.url.localeCompare(b.url));
   }
   
   const grouped = new Map<string, RawLinkData[]>();

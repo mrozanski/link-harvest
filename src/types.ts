@@ -3,7 +3,7 @@ export interface HarvestOptions {
   domain?: string;          // optional; inferred from first seed if missing
   maxDepth?: number;        // default: 2
   maxPages?: number;        // default: 1000
-  timeoutMs?: number;       // default: 45000
+  timeoutMs?: number;       // default: 5000
   settleMs?: number;        // default: 250
   userAgent?: string;       // default: fixed UA
   logLevel?: 'silent' | 'error' | 'warn' | 'info' | 'debug';

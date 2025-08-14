@@ -80,7 +80,7 @@ export class LinkHarvester {
   private async crawl(): Promise<void> {
     const maxPages = this.options.maxPages || 1000;
     const maxDepth = this.options.maxDepth || 2;
-    const timeoutMs = this.options.timeoutMs || 45000;
+    const timeoutMs = this.options.timeoutMs || 5000;
     const settleMs = this.options.settleMs || 250;
     
     let pagesProcessed = 0;
