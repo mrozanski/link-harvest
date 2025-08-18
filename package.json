@@ -1,6 +1,6 @@
 {
   "name": "@dotsur/link-harvest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deterministic link harvesting for QA and website migration testing",
   "type": "module",
   "main": "dist/index.js",
@@ -18,7 +18,15 @@
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.ts"
   },
-  "keywords": ["qa", "testing", "crawler", "links", "harvest", "n8n", "dotsur"],
+  "keywords": [
+    "qa",
+    "testing",
+    "crawler",
+    "links",
+    "harvest",
+    "n8n",
+    "dotsur"
+  ],
   "author": "Mariano Rozanski <mariano@dotsur.co>",
   "license": "AGPL-3.0-or-later",
   "repository": {
