@@ -198,7 +198,8 @@ async function main() {
     if (argv.output === 'csv') {
       output = formatAsCSV(result, argv.dedupe);
     } else {
-      output = JSON.stringify(result, null, 2);
+      // Output JSON as a single line for better parsing by tools like n8n
+      output = JSON.stringify(result);
     }
 
     // Write to file or stdout
