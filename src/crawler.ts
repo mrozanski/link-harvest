@@ -133,7 +133,7 @@ export class LinkHarvester {
       const contentType = response?.headers()['content-type'] || null;
 
       // Extract links from page
-      const pageLinks = await this.browserManager.extractLinksFromPage(page, finalUrl);
+      const pageLinks = await this.browserManager.extractLinksFromPage(page, finalUrl, this.options.selector, this.options.waitFor);
       
       // Process extracted links
       const discoveredUrls: string[] = [];

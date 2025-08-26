@@ -8,6 +8,17 @@ export type { HarvestOptions, HarvestResult, LinkRecord, AnchorTextInfo };
  * Main harvest function - library API entry point
  * 
  * @param options - Harvest configuration options
+ *   - start: Array of starting URLs (required)
+ *   - domain: Target domain (optional, inferred from first URL if missing)
+ *   - maxDepth: Maximum crawl depth (default: 2)
+ *   - maxPages: Maximum pages to crawl (default: 1000)
+ *   - timeoutMs: Page load timeout in milliseconds (default: 15000)
+ *   - settleMs: Additional wait time after page load (default: 500)
+ *   - userAgent: Custom user agent string (default: Link-Harvest/1.0)
+ *   - logLevel: Logging level (default: 'warn')
+ *   - dedupe: Deduplication mode (default: 'none')
+ *   - selector: CSS selector to target specific elements for link extraction (optional)
+ *   - waitFor: DOM selector to wait for before starting link extraction (optional)
  * @returns Promise resolving to harvest results with links and metadata
  */
 export async function harvest(options: HarvestOptions): Promise<HarvestResult> {
@@ -29,8 +40,8 @@ export async function harvest(options: HarvestOptions): Promise<HarvestResult> {
   const harvestOptions: HarvestOptions = {
     maxDepth: 2,
     maxPages: 1000,
-    timeoutMs: 5000,
-    settleMs: 250,
+    timeoutMs: 15000,
+    settleMs: 500,
     userAgent: "Link-Harvest/1.0 (+https://github.com/mrozanski/link-harvest)",
     logLevel: 'warn',
     dedupe: 'none',

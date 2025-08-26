@@ -18,6 +18,8 @@ interface CliArgs {
   'log-level': LogLevel;
   'user-agent': string;
   dedupe: DedupeMode;
+  selector?: string;
+  'wait-for'?: string;
 }
 
 function formatAsCSV(result: HarvestResult, dedupeMode: DedupeMode): string {
@@ -167,10 +169,20 @@ async function main() {
       description: 'Deduplication mode: none (current), url (group by URL+anchor), full (group by URL only)',
       default: 'none' as const
     })
+    .option('selector', {
+      type: 'string',
+      description: 'CSS selector to target specific elements for link extraction (optional)'
+    })
+    .option('wait-for', {
+      type: 'string',
+      description: 'DOM selector to wait for before starting link extraction (optional)'
+    })
     .example('$0 --start https://example.com --domain example.com', 'Basic crawl')
     .example('$0 --start https://example.com --max-depth 3 --output csv', 'Deep crawl with CSV output')
     .example('$0 --start https://example.com --out-file results.json --log-level info', 'Save to file with verbose logging')
     .example('$0 --start https://example.com --dedupe url', 'Deduplicate by URL and anchor text')
+    .example('$0 --start https://example.com --selector ".product-grid"', 'Extract links only from product grid')
+    .example('$0 --start https://example.com --wait-for ".content-loaded"', 'Wait for content-loaded element before extracting links')
     .help()
     .version()
     .strict()
@@ -187,7 +199,9 @@ async function main() {
       settleMs: argv['settle-ms'],
       userAgent: argv['user-agent'],
       logLevel: argv['log-level'],
-      dedupe: argv.dedupe
+      dedupe: argv.dedupe,
+      ...(argv.selector && { selector: argv.selector }),
+      ...(argv['wait-for'] && { waitFor: argv['wait-for'] })
     };
 
     // Run the harvest

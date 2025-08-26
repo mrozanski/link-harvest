@@ -8,6 +8,8 @@ export interface HarvestOptions {
   userAgent?: string;       // default: fixed UA
   logLevel?: 'silent' | 'error' | 'warn' | 'info' | 'debug';
   dedupe?: 'none' | 'url' | 'full';  // default: 'none'
+  selector?: string;        // optional; CSS selector to target specific elements for link extraction
+  waitFor?: string;         // optional; DOM selector to wait for before starting link extraction
 }
 
 export interface AnchorTextInfo {

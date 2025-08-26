@@ -143,6 +143,119 @@ The CSV format adapts based on deduplication mode:
 - `--log-level <level>` - Logging level: silent, error, warn, info, debug (default: warn)
 - `--user-agent <string>` - Custom user agent string
 - `--dedupe <none|url|full>` - Deduplication mode (default: none)
+- `--selector <css-selector>` - CSS selector to target specific elements for link extraction (optional)
+- `--wait-for <css-selector>` - DOM selector to wait for before starting link extraction (optional)
+
+## Targeted Link Extraction
+
+The `--selector` option allows you to extract links only from specific parts of a webpage, ignoring navigation, footers, and other unwanted areas. This is particularly useful for e-commerce sites, search results, and content-focused pages.
+
+### Basic Usage
+
+```bash
+# Extract only product links from a specific container
+link-harvest --start https://example.com --selector ".product-grid"
+
+# Target search results while ignoring navigation
+link-harvest --start https://example.com --selector ".search-results"
+
+# Use multiple selectors (OR logic)
+link-harvest --start https://example.com --selector ".main-content, .content-area"
+```
+
+### Common Selector Patterns
+
+**Product Grids:**
+```bash
+# Gibson Mod Collection (specific)
+link-harvest --start http://gibson.com/collections/gibson-mod-collection \
+  --selector ".ais-hits-container.page-width.ais-results-as-block.grid.data-desktop-layout.--mobile"
+
+# Generic product selectors
+link-harvest --start https://shop.example.com --selector ".product-list"
+link-harvest --start https://shop.example.com --selector ".catalog-items"
+```
+
+**Content Areas (excluding navigation):**
+```bash
+# Main content only
+link-harvest --start https://blog.example.com --selector "main"
+
+# Content excluding sidebar/navigation
+link-harvest --start https://example.com --selector ".content:not(.sidebar):not(.nav)"
+```
+
+**Search Results:**
+```bash
+# Algolia search results
+link-harvest --start https://example.com --selector ".ais-hits-container"
+
+# Generic search results
+link-harvest --start https://example.com --selector ".search-results"
+```
+
+### Finding the Right Selector
+
+1. **Inspect the page**: Right-click on the element containing your target links
+2. **Look for unique identifiers**: Classes, IDs, or data attributes that identify the container
+3. **Test in browser console**: `document.querySelector("your-selector")`
+4. **Verify link count**: `document.querySelector("your-selector").querySelectorAll("a").length`
+
+### Library API Usage
+
+```typescript
+import { harvest } from '@dotsur/link-harvest';
+
+const result = await harvest({
+  start: ['https://gibson.com/collections/gibson-mod-collection'],
+  selector: '.ais-hits-container.page-width.ais-results-as-block.grid.data-desktop-layout.--mobile',
+  maxDepth: 1,
+  maxPages: 1
+});
+
+console.log(`Found ${result.count} product links`);
+```
+
+## Waiting for Dynamic Content
+
+The `--wait-for` option allows you to specify a DOM selector that the crawler should wait for before starting to extract links. This is particularly useful for sites with client-side rendering or dynamic content loading.
+
+### Basic Usage
+
+```bash
+# Wait for a specific element before extracting links
+link-harvest --start https://example.com --wait-for ".content-loaded"
+
+# Combine with selector for targeted extraction
+link-harvest --start https://example.com --wait-for ".page-ready" --selector ".product-grid"
+```
+
+### Use Cases
+
+1. **Client-side rendered content**: Wait for JavaScript to populate the page
+2. **Lazy-loaded sections**: Wait for specific containers to appear
+3. **Progressive loading**: Wait for key elements before proceeding
+4. **Custom loading states**: Wait for your app's "ready" indicator
+
+### Library API Usage
+
+```typescript
+import { harvest } from '@dotsur/link-harvest';
+
+const result = await harvest({
+  start: ['https://example.com'],
+  waitFor: '.content-loaded',  // Wait for this element
+  selector: '.product-grid',   // Then extract from this container
+  maxDepth: 1
+});
+```
+
+### How It Works
+
+1. **Page loads**: Crawler waits for `domcontentloaded` event
+2. **Wait for element**: If `--wait-for` is specified, waits for that selector
+3. **Extract links**: Proceeds with link extraction (with or without `--selector`)
+4. **Fallback behavior**: If no `--wait-for` specified, continues with current logic
 
 ## Development
 
